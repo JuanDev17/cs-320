@@ -11,25 +11,20 @@ public class Contact {
 	// how to create an object of the class
 	public Contact(String contactId, String firstName, String lastName, String phone, String address) {
 		// checking ID against requirements
-		if (contactId == null || contactId.length() > 10) {
-			throw new IllegalArgumentException("Invalid ID");
-		}
+		validateContactId(contactId);
+
 		// checking first name against requirements
-		if (firstName == null || firstName.length() > 10) {
-			throw new IllegalArgumentException("Invalid First Name");
-		}
+		validateFirstName(firstName);
+
 		// checking last name against requirements
-		if (lastName == null || lastName.length() > 10) {
-			throw new IllegalArgumentException("Invalid Last Name");
-		}
+		validateLastName(lastName);
+
 		// checking phone against requirements
-		if (phone == null || phone.length() != 10) {
-			throw new IllegalArgumentException("Invalid Phone Number");
-		}
+		validatePhone(phone);
+
 		// checking address against requirements
-		if (address == null || address.length() > 30) {
-			throw new IllegalArgumentException("Invalid Address");
-		}
+		validateAddress(address);
+
 		// handling assuming no exceptions
 		this.contactId = contactId;
 		this.firstName = firstName;
@@ -57,27 +52,55 @@ public class Contact {
 	// setter methods for use by ContactService
 	// no set methods for the contactId because it should not be updated
 	public void setFirstName(String fName) {
-		if (fName == null || fName.length() > 10) {
-			throw new IllegalArgumentException("Ivalid First Name");
-		}
+		validateFirstName(fName);
 		this.firstName = fName;
 	}
 	public void setLastName(String lName) {
-		if (lName == null || lName.length() > 10) {
-			throw new IllegalArgumentException("Invalid Last Name");
-		}
+		validateLastName(lName);
 		this.lastName = lName;
 	}
 	public void setPhone(String newPhone) {
-		if (newPhone == null || newPhone.length() != 10) {
-			throw new IllegalArgumentException("Inavlid Phone Number");
-		}
+		validatePhone(newPhone);
 		this.phone = newPhone;
 	}
+
 	public void setAddress(String newAddress) {
-		if (newAddress == null || newAddress.length() > 30) {
-			throw new IllegalArgumentException("Invalid Address");
-		}
+		validateAddress(newAddress);
 		this.address = newAddress;
 	}
+
+	// HELPER METHODS -
+	private static void validatePhone(String phoneNumber){
+		if(phoneNumber == null || !phoneNumber.matches("\\d{10}")){
+			throw new IllegalArgumentException("Phone number is invalid");
+		}
+	}
+
+	private static void validateFirstName(String firstName){
+		if (firstName == null || firstName.isBlank() || firstName.length() > 10) {
+			throw new IllegalArgumentException("Invalid First Name");
+		}
+	}
+
+	private static void validateLastName(String lastName){
+		if (lastName == null || lastName.isBlank() || lastName.length() > 10) {
+			throw new IllegalArgumentException("Invalid Last Name");
+		}
+	}
+
+	private static void validateContactId(String contactId){
+		if(contactId == null || contactId.isBlank() || contactId.length() > 10 ){
+			throw new IllegalArgumentException("Invalid Contact Id");
+		}
+	}
+
+	private static void validateAddress(String address){
+		if (address == null || address.isBlank() || address.length() > 30) {
+			throw new IllegalArgumentException("Invalid Address");
+		}
+
+
+	}
+
+
 }
