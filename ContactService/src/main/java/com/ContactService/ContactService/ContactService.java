@@ -1,5 +1,6 @@
 package com.ContactService.ContactService;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 public class ContactService {
@@ -11,15 +12,15 @@ public class ContactService {
 	public ContactService(ContactRepository contactRepository){
 		this.contactRepository = contactRepository;
 	}
-	private  int nextId = 100000002;
-	
-	// generate unique Id
-	public  String generateUniqueId() {
-		// placeholder string
-		return Integer.toString(nextId++);
+	private int nextId = 100000002;
 
-		while(contactRepository.existsById(id)){
-			id = Integer.toString(nextId++)
+	// Generate a unique ID
+	public String generateUniqueId() {
+
+		String id = Integer.toString(nextId++);
+
+		while (contactRepository.existsById(id)) {
+			id = Integer.toString(nextId++);
 		}
 
 		return id;
@@ -93,5 +94,12 @@ public class ContactService {
 		return contactRepository.existsById(contactId);
 		}
 
+	public Contact getContactById(String id) {
+		return contactRepository.findById(id).orElse(null);
+	}
+
+	public List<Contact> getAllContacts() {
+		return contactRepository.findAll();
+	}
 
 }

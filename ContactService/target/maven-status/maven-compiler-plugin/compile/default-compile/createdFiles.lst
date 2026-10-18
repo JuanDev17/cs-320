@@ -1,4 +1,7 @@
+com/ContactService/ContactService/ContactServiceApplication.class
+com/ContactService/ContactService/ContactController.class
 com/ContactService/ContactService/ContactRepository.class
 com/ContactService/ContactService/Contact.class
-com/ContactService/ContactService/ContactServiceApplication.class
+com/ContactService/ContactService/ContactController$ContactRequest.class
+com/ContactService/ContactService/GlobalExceptionHandler.class
 com/ContactService/ContactService/ContactService.class
