@@ -1,17 +1,29 @@
+package com.ContactService.ContactService;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 class ContactServiceTest {
 
+	@Autowired
+	private ContactService contactService;
+
+	@Autowired
+	private ContactRepository contactRepository;
+
+	// Clear database before each test
 	@BeforeEach
 	void setUp() {
-		ContactService.contactHashMap.clear();
+		contactRepository.deleteAll();
 	}
 
-	// Test adding a contact to the HashMap
+	// Test adding a contact to the database
 	@Test
 	void testContactServiceClass() {
 		Contact contact = new Contact(
@@ -22,9 +34,11 @@ class ContactServiceTest {
 				"123 Fake St. Encino, CA 91158"
 		);
 
-		ContactService.addContact(contact);
+		contactService.addContact(contact);
 
-		Contact storedContact = ContactService.contactHashMap.get("1001");
+		Contact storedContact = contactRepository
+				.findById("1001")
+				.orElse(null);
 
 		assertNotNull(storedContact);
 		assertEquals("1001", storedContact.getId());
@@ -48,10 +62,10 @@ class ContactServiceTest {
 				"123 Fake St."
 		);
 
-		ContactService.addContact(contact);
-		ContactService.deleteContact("1002");
+		contactService.addContact(contact);
+		contactService.deleteContact("1002");
 
-		assertFalse(ContactService.searchContact("1002"));
+		assertFalse(contactService.searchContact("1002"));
 	}
 
 	// Test updating first name
@@ -65,12 +79,17 @@ class ContactServiceTest {
 				"Halloween Ave."
 		);
 
-		ContactService.addContact(contact);
-		ContactService.updateFirstName("1003", "Mary");
+		contactService.addContact(contact);
+		contactService.updateFirstName("1003", "Mary");
 
+		Contact updatedContact = contactRepository
+				.findById("1003")
+				.orElse(null);
+
+		assertNotNull(updatedContact);
 		assertEquals(
 				"Mary",
-				ContactService.contactHashMap.get("1003").getFirstName()
+				updatedContact.getFirstName()
 		);
 	}
 
@@ -85,12 +104,17 @@ class ContactServiceTest {
 				"Halloween Ave."
 		);
 
-		ContactService.addContact(contact);
-		ContactService.updateLastName("1004", "Poppins");
+		contactService.addContact(contact);
+		contactService.updateLastName("1004", "Poppins");
 
+		Contact updatedContact = contactRepository
+				.findById("1004")
+				.orElse(null);
+
+		assertNotNull(updatedContact);
 		assertEquals(
 				"Poppins",
-				ContactService.contactHashMap.get("1004").getLastName()
+				updatedContact.getLastName()
 		);
 	}
 
@@ -105,12 +129,20 @@ class ContactServiceTest {
 				"123 Fake St."
 		);
 
-		ContactService.addContact(contact);
-		ContactService.updatePhoneNum("1005", "8884446161");
+		contactService.addContact(contact);
+		contactService.updatePhoneNum(
+				"1005",
+				"8884446161"
+		);
 
+		Contact updatedContact = contactRepository
+				.findById("1005")
+				.orElse(null);
+
+		assertNotNull(updatedContact);
 		assertEquals(
 				"8884446161",
-				ContactService.contactHashMap.get("1005").getPhone()
+				updatedContact.getPhone()
 		);
 	}
 
@@ -125,15 +157,20 @@ class ContactServiceTest {
 				"123 Fake St."
 		);
 
-		ContactService.addContact(contact);
-		ContactService.updateAddress(
+		contactService.addContact(contact);
+		contactService.updateAddress(
 				"1006",
 				"456 Fake St. Acton, CA"
 		);
 
+		Contact updatedContact = contactRepository
+				.findById("1006")
+				.orElse(null);
+
+		assertNotNull(updatedContact);
 		assertEquals(
 				"456 Fake St. Acton, CA",
-				ContactService.contactHashMap.get("1006").getAddress()
+				updatedContact.getAddress()
 		);
 	}
 
@@ -148,7 +185,7 @@ class ContactServiceTest {
 				"Original Contact Address"
 		);
 
-		ContactService.addContact(original);
+		contactService.addContact(original);
 
 		Contact duplicate = new Contact(
 				"49594",
@@ -160,7 +197,7 @@ class ContactServiceTest {
 
 		Assertions.assertThrows(
 				IllegalArgumentException.class,
-				() -> ContactService.addContact(duplicate)
+				() -> contactService.addContact(duplicate)
 		);
 	}
 }

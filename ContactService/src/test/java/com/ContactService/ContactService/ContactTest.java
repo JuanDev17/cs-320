@@ -1,3 +1,5 @@
+package com.ContactService.ContactService;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Assertions;

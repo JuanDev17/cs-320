@@ -1,2 +1,4 @@
-Contact.class
-ContactService.class
+com/ContactService/ContactService/ContactRepository.class
+com/ContactService/ContactService/Contact.class
+com/ContactService/ContactService/ContactServiceApplication.class
+com/ContactService/ContactService/ContactService.class

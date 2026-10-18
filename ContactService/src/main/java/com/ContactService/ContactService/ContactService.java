@@ -1,38 +1,39 @@
-import java.util.HashMap;
+package com.ContactService.ContactService;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ContactService {
-	
-	// needed variables for creating objects of Contact class
-	public static String publicId;
-	public String publicFirstName;
-	public String publicLastName;
-	public String publicPhone;
-	public String publicAddress;
-	
-	// create a structure to store data of contacts
-	//static ArrayList<Contact> contactList = new ArrayList<Contact>(0);
 
-	// HashMap takes 2 types
-	// HashMap is an object
-	static HashMap<String, Contact> contactHashMap = new HashMap<>();
-	private static int nextId = 100000002;
+	// introducing our DB repo,
+	private ContactRepository contactRepository;
+
+	// constructor injection
+	public ContactService(ContactRepository contactRepository){
+		this.contactRepository = contactRepository;
+	}
+	private  int nextId = 100000002;
 	
 	// generate unique Id
-	public static String generateUniqueId() {
+	public  String generateUniqueId() {
 		// placeholder string
 		return Integer.toString(nextId++);
+
+		while(contactRepository.existsById(id)){
+			id = Integer.toString(nextId++)
+		}
+
+		return id;
 	}
 	
-	// creation of a Contact object and adding it to the arraylist
-	public static void addContact(String fName, String lName, String phone, String address) {
+	public  void addContact(String fName, String lName, String phone, String address) {
 		String ID = generateUniqueId();
-		Contact Contact1 = new Contact(ID, fName, lName, phone, address);
+		Contact contact = new Contact(ID, fName, lName, phone, address);
 
-		addContact(Contact1);
+		addContact(contact);
 	}
 
 	// add a contact as a whole manually for testing 
-	public static void addContact(Contact newContact) {
+	public  void addContact(Contact newContact) {
 		String tempId = newContact.getId();
 
 			// new method checking for duplicate IDs
@@ -41,54 +42,55 @@ public class ContactService {
 			}
 
 		//contactList.add(newContact);
-		contactHashMap.put(tempId, newContact);
+		contactRepository.save(newContact);
 	}
 	
 	// updater methods for fields that can be updated
-	public static void updateFirstName(String uniqueId, String publicFirstName) {
-		Contact contact = contactHashMap.get(uniqueId);
+	public  void updateFirstName(String uniqueId, String publicFirstName) {
+		Contact contact = contactRepository.findById(uniqueId).orElse(null);
 
 		if(contact == null) return;
 
 		contact.setFirstName(publicFirstName);
+		contactRepository.save(contact);
 	}
-	public static void updateLastName(String uniqueId, String publicLastName) {
-		Contact contact = contactHashMap.get(uniqueId);
+	public  void updateLastName(String uniqueId, String publicLastName) {
+		Contact contact = contactRepository.findById(uniqueId).orElse(null);
 
 		if(contact == null) return;
 
 		contact.setLastName(publicLastName);
+		contactRepository.save(contact);
 	}
-	public static void updatePhoneNum(String uniqueId, String publicPhone) {
-		Contact contact = contactHashMap.get(uniqueId);
+	public  void updatePhoneNum(String uniqueId, String publicPhone) {
+		Contact contact = contactRepository.findById(uniqueId).orElse(null);
 
 		if(contact == null) return;
 
 		contact.setPhone(publicPhone);
+		contactRepository.save(contact);
 	}
-	public static void updateAddress(String uniqueId, String publicAddress) {
-		Contact contact = contactHashMap.get(uniqueId);
+	public  void updateAddress(String uniqueId, String publicAddress) {
+		Contact contact = contactRepository.findById(uniqueId).orElse(null);
 
 		if(contact == null) return;
 
 		contact.setAddress(publicAddress);
+		contactRepository.save(contact);
 	}
 	// delete a contact from the list
-	public static void deleteContact(String uniqueId) {
-		contactHashMap.remove(uniqueId);
+	public  void deleteContact(String uniqueId) {
+		contactRepository.deleteById(uniqueId);
 	}
 	// quick search function for testing
-	public static boolean searchContact(String uniqueId) {
-		return contactHashMap.containsKey(uniqueId);
+	public  boolean searchContact(String uniqueId) {
+		return contactRepository.existsById(uniqueId);
 	}
 
-	// remove findIndex() method, hashMap doesn't need index
-
 	// method for checking for duplicates -
-	public static boolean contactIdExists(String contactId) {
-		// compare each id,
-		// containsKey checking if the specific key exists within the collection
-		return contactHashMap.containsKey(contactId);
+	public  boolean contactIdExists(String contactId) {
+		// existById() is the way to check with Spring Data's JPA
+		return contactRepository.existsById(contactId);
 		}
 
 

@@ -1,12 +1,22 @@
+package com.ContactService.ContactService;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class Contact {
 	// needed variables for the class
+	@Id
 	private String contactId;
 	private String firstName;
 	private String lastName;
 	private String phone;
 	private String address;
-	
-	
+
+	// empty instance, so JPA ( Java Persistence Api ) can create contact objects
+	protected Contact(){
+
+	}
 	
 	// how to create an object of the class
 	public Contact(String contactId, String firstName, String lastName, String phone, String address) {
